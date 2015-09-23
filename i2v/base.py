@@ -78,11 +78,13 @@ class Illustration2VecBase(object):
     def extract_feature(self, images):
         imgs = [np.asarray(img, dtype=np.float32) for img in images]
         feature = self._extract(imgs, layername='encode1')
+        feature = feature.reshape(feature.shape[0], -1)
         return feature
 
     def extract_binary_feature(self, images):
         imgs = [np.asarray(img, dtype=np.float32) for img in images]
         feature = self._extract(imgs, layername='encode1neuron')
+        feature = feature.reshape(feature.shape[0], -1)
         binary_feature = np.zeros_like(feature, dtype=np.uint8)
         binary_feature[feature > 0.5] = 1
         return np.packbits(binary_feature, axis=1)
