@@ -39,7 +39,7 @@ def make_i2v_with_caffe(net_path, param_path, mean_path, tag_path=None):
         mean=np.load(mean_path).mean(1).mean(1),
         channel_swap=(2, 1, 0))
     if tag_path is not None:
-        tags = json.loads(open(tag_path, "r").read())
+        tags = json.loads(open(tag_path, 'r').read())
         assert(len(tags) == 1539)
         return CaffeI2V(net, tags)
     else:

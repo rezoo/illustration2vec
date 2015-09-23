@@ -66,7 +66,7 @@ def make_i2v_with_chainer(param_path, mean_path, tag_path=None):
     net = CaffeFunction(param_path)
     mean = np.load(mean_path).mean(1).mean(1)
     if tag_path is not None:
-        tags = json.loads(open(tag_path, "r").read())
+        tags = json.loads(open(tag_path, 'r').read())
         assert(len(tags) == 1539)
         return ChainerI2V(net, mean, tags)
     else:

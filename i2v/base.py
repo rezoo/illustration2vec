@@ -21,7 +21,7 @@ class Illustration2VecBase(object):
     def _estimate(self, images):
         assert(self.tags is not None)
         imgs = [np.asarray(img, dtype=np.float32) for img in images]
-        prob = self._extract(imgs, layername="prob")
+        prob = self._extract(imgs, layername='prob')
         prob = prob.reshape(prob.shape[0], -1)
         return prob
 
@@ -43,16 +43,16 @@ class Illustration2VecBase(object):
         result = []
         for i in range(prob.shape[0]):
             result.append({
-                "general": zip(
+                'general': zip(
                     self.tags[general_arg[i]],
                     general_prob[i, general_arg[i]].tolist()),
-                "character": zip(
+                'character': zip(
                     self.tags[512 + character_arg[i]],
                     character_prob[i, character_arg[i]].tolist()),
-                "copyright": zip(
+                'copyright': zip(
                     self.tags[1024 + copyright_arg[i]],
                     copyright_prob[i, copyright_arg[i]].tolist()),
-                "rating": zip(
+                'rating': zip(
                     self.tags[1536 + rating_arg[i]],
                     rating_prob[i, rating_arg[i]].tolist()),
             })
@@ -62,27 +62,27 @@ class Illustration2VecBase(object):
         preds = self.estimate_top_tags(images, n_tag=512)
         result = []
         for pred in preds:
-            general = [(t, p) for t, p in pred["general"] if p > threshold]
+            general = [(t, p) for t, p in pred['general'] if p > threshold]
             character = [
-                (t, p) for t, p in pred["character"] if p > threshold]
+                (t, p) for t, p in pred['character'] if p > threshold]
             copyright = [
-                (t, p) for t, p in pred["copyright"] if p > threshold]
+                (t, p) for t, p in pred['copyright'] if p > threshold]
             result.append({
-                "general": general,
-                "character": character,
-                "copyright": copyright,
-                "rating": pred["rating"],
+                'general': general,
+                'character': character,
+                'copyright': copyright,
+                'rating': pred['rating'],
             })
         return result
 
     def extract_feature(self, images):
         imgs = [np.asarray(img, dtype=np.float32) for img in images]
-        feature = self._extract(imgs, layername="encode1")
+        feature = self._extract(imgs, layername='encode1')
         return feature
 
     def extract_binary_feature(self, images):
         imgs = [np.asarray(img, dtype=np.float32) for img in images]
-        feature = self._extract(imgs, layername="encode1neuron")
+        feature = self._extract(imgs, layername='encode1neuron')
         binary_feature = np.zeros_like(feature, dtype=np.uint8)
         binary_feature[feature > 0.5] = 1
         return np.packbits(binary_feature, axis=1)
