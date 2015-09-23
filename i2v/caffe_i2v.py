@@ -5,9 +5,10 @@ from caffe import Classifier
 from caffe.io import resize_image
 
 
-class I2VCaffeExtractor(Illustration2VecBase):
+class CaffeI2V(Illustration2VecBase):
 
     def _extract(self, inputs, layername):
+        # NOTE: we import the following codes from caffe.Classifier
         shape = (
             len(inputs), self.net.image_dims[0],
             self.net.image_dims[1], inputs[0].shape[2])
@@ -40,6 +41,6 @@ def make_i2v_with_caffe(net_path, param_path, mean_path, tag_path=None):
     if tag_path is not None:
         tags = json.loads(open(tag_path, "r").read())
         assert(len(tags) == 1539)
-        return I2VCaffeExtractor(net, tags)
+        return CaffeI2V(net, tags)
     else:
-        return I2VCaffeExtractor(net)
+        return CaffeI2V(net)

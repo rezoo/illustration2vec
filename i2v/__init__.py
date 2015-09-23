@@ -4,7 +4,13 @@ caffe_available = False
 chainer_available = False
 
 try:
-    from i2v.caffe_extractor import I2VCaffeExtractor, make_i2v_with_caffe
+    from i2v.caffe_i2v import CaffeI2V, make_i2v_with_caffe
+    caffe_available = True
+except ImportError:
+    pass
+
+try:
+    from i2v.chainer_i2v import ChainerI2V, make_i2v_with_chainer
     caffe_available = True
 except ImportError:
     pass
