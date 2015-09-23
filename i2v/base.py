@@ -1,5 +1,4 @@
 from abc import ABCMeta, abstractmethod
-import json
 import numpy as np
 
 
@@ -77,11 +76,13 @@ class Illustration2VecBase(object):
         return result
 
     def extract_feature(self, images):
-        feature = self._extract(images, layername="encode1")
+        imgs = [np.asarray(img, dtype=np.float32) for img in images]
+        feature = self._extract(imgs, layername="encode1")
         return feature
 
     def extract_binary_feature(self, images):
-        feature = self._extract(images, layername="encode1neuron")
+        imgs = [np.asarray(img, dtype=np.float32) for img in images]
+        feature = self._extract(imgs, layername="encode1neuron")
         binary_feature = np.zeros_like(feature, dtype=np.uint8)
         binary_feature[feature > 0.5] = 1
-        return np.packbits(feature, axis=1)
+        return np.packbits(binary_feature, axis=1)

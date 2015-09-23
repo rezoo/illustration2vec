@@ -1,4 +1,6 @@
 from i2v.base import Illustration2VecBase
+import json
+import numpy as np
 from caffe import Classifier
 from caffe.io import resize_image
 
@@ -38,6 +40,6 @@ def make_i2v_with_caffe(net_path, param_path, mean_path, tag_path=None):
     if tag_path is not None:
         tags = json.loads(open(tag_path, "r").read())
         assert(len(tags) == 1539)
-        return Illustration2Vec(net, tags)
+        return I2VCaffeExtractor(net, tags)
     else:
-        return Illustration2Vec(net)
+        return I2VCaffeExtractor(net)
