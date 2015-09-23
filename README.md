@@ -1,8 +1,8 @@
-# Illustration2Vec (i2v)
+# Illustration2Vec
 
-``i2v`` is a simple library for estimating a set of tags and extracting
-semantic feature vectors from given illustrations with Convolutional Neural
-Networks. For details, please see
+``illustration2vec (i2v)`` is a simple library for estimating a set of tags and
+extracting semantic feature vectors from given illustrations with
+Convolutional Neural Networks. For details, please see
 [our project page](http://illustration2vec.net) or
 [our main paper](http://illustration2vec.net/papers/illustration2vec-main.pdf).
 
