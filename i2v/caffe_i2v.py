@@ -1,11 +1,14 @@
 from i2v.base import Illustration2VecBase
+import json
+import numpy as np
 from caffe import Classifier
 from caffe.io import resize_image
 
 
-class I2VCaffeExtractor(Illustration2VecBase):
+class CaffeI2V(Illustration2VecBase):
 
     def _extract(self, inputs, layername):
+        # NOTE: we import the following codes from caffe.Classifier
         shape = (
             len(inputs), self.net.image_dims[0],
             self.net.image_dims[1], inputs[0].shape[2])
@@ -30,14 +33,13 @@ class I2VCaffeExtractor(Illustration2VecBase):
         return out
 
 
-def make_i2v_with_caffe(net_path, param_path, mean_path, tag_path=None):
+def make_i2v_with_caffe(net_path, param_path, tag_path=None):
+    mean = np.array([ 164.76139251,  167.47864617,  181.13838569])
     net = Classifier(
-        net_path, param_path,
-        mean=np.load(mean_path).mean(1).mean(1),
-        channel_swap=(2, 1, 0))
+        net_path, param_path, mean=mean, channel_swap=(2, 1, 0))
     if tag_path is not None:
-        tags = json.loads(open(tag_path, "r").read())
+        tags = json.loads(open(tag_path, 'r').read())
         assert(len(tags) == 1539)
-        return Illustration2Vec(net, tags)
+        return CaffeI2V(net, tags)
     else:
-        return Illustration2Vec(net)
+        return CaffeI2V(net)
