@@ -78,8 +78,7 @@ import i2v
 from PIL import Image
 
 # In the feature vector extraction, you do not need to specify the tag.
-illust2vec = i2v.make_i2v_with_chainer(
-    "illust2vec_ver200.caffemodel")
+illust2vec = i2v.make_i2v_with_chainer("illust2vec_ver200.caffemodel")
 
 # illust2vec = i2v.make_i2v_with_caffe(
 #     "illust2vec.prototxt", "illust2vec_ver200.caffemodel")
@@ -132,4 +131,5 @@ shape: (1, 512), dtype: uint8
 ```
 
 # License
-This library is licensed under the MIT License.
+The pre-trained models and the other files we have provided are licensed
+under the MIT License.
