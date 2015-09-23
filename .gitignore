@@ -59,3 +59,7 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# The followings are the customized .gitignore
+*.caffemodel
+*.json
