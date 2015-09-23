@@ -33,11 +33,10 @@ class CaffeI2V(Illustration2VecBase):
         return out
 
 
-def make_i2v_with_caffe(net_path, param_path, mean_path, tag_path=None):
+def make_i2v_with_caffe(net_path, param_path, tag_path=None):
+    mean = np.array([ 164.76139251,  167.47864617,  181.13838569])
     net = Classifier(
-        net_path, param_path,
-        mean=np.load(mean_path).mean(1).mean(1),
-        channel_swap=(2, 1, 0))
+        net_path, param_path, mean=mean, channel_swap=(2, 1, 0))
     if tag_path is not None:
         tags = json.loads(open(tag_path, 'r').read())
         assert(len(tags) == 1539)

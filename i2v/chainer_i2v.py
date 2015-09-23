@@ -10,8 +10,9 @@ from chainer.functions.caffe import CaffeFunction
 
 class ChainerI2V(Illustration2VecBase):
 
-    def __init__(self, net, mean, tags=None):
-        super(ChainerI2V, self).__init__(net, tags)
+    def __init__(self, *args, **kwargs):
+        super(ChainerI2V, self).__init__(*args, **kwargs)
+        mean = np.array([ 164.76139251,  167.47864617,  181.13838569])
         self.mean = mean
 
     def resize_image(self, im, new_dims, interp_order=1):
@@ -45,7 +46,7 @@ class ChainerI2V(Illustration2VecBase):
         input_ -= self.mean  # subtract mean
         input_ = input_.transpose((0, 3, 1, 2))  # (N, H, W, C) -> (N, C, H, W)
         x = Variable(input_)
-        y, = self.net(inputs={'data': x}, outputs=[layername])
+        y, = self.net(inputs={'data': x}, outputs=[layername], train=False)
         return y
 
     def _extract(self, inputs, layername):
@@ -62,12 +63,11 @@ class ChainerI2V(Illustration2VecBase):
             y = self._forward(inputs, layername)
             return y.data
 
-def make_i2v_with_chainer(param_path, mean_path, tag_path=None):
+def make_i2v_with_chainer(param_path, tag_path=None):
     net = CaffeFunction(param_path)
-    mean = np.load(mean_path).mean(1).mean(1)
     if tag_path is not None:
         tags = json.loads(open(tag_path, 'r').read())
         assert(len(tags) == 1539)
-        return ChainerI2V(net, mean, tags)
+        return ChainerI2V(net, tags)
     else:
-        return ChainerI2V(net, mean)
+        return ChainerI2V(net)
