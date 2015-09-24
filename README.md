@@ -12,7 +12,8 @@ Convolutional Neural Networks. For details, please see
 
 # Requirements
 
-* Pre-trained CNN models (please download them from http://illustration2vec.net).
+* Pre-trained CNN models (please download them from
+  http://illustration2vec.net or run ``get_models.sh`` in this repository).
 * ``numpy`` and ``scipy``
 * ``PIL`` (Python Imaging Library) or its alternatives (e.g., ``Pillow``) 
 * ``skimage`` (Image processing library for python)
