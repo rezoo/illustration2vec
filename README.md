@@ -18,7 +18,7 @@ Convolutional Neural Networks. For details, please see
 * ``skimage`` (Image processing library for python)
 
 In addition to the above libraries and the pre-trained models, `i2v` requires
-either ``caffe`` or ``chainer`` library. If you do not familiar with deep
+either ``caffe`` or ``chainer`` library. If you are not familiar with deep
 learning libraries, we recommend to use ``chainer`` that can be installed
 via ``pip`` command.
 
@@ -29,7 +29,8 @@ feature vector extraction -- by using the following illustration [1].
 
 ![slide](images/miku.jpg)
 
-[1] Hatsune Miku (初音ミク), http://piapro.net/en_for_creators.html.
+[1] Hatsune Miku (初音ミク), © Crypton Future Media, INC.,
+http://piapro.net/en_for_creators.html.
 This image is licensed under the Creative Commons - Attribution-NonCommercial,
 3.0 Unported (CC BY-NC).
 
