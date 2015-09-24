@@ -11,7 +11,7 @@ except ImportError:
 
 try:
     from i2v.chainer_i2v import ChainerI2V, make_i2v_with_chainer
-    caffe_available = True
+    chainer_available = True
 except ImportError:
     pass
 
