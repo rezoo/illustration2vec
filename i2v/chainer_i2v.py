@@ -1,5 +1,6 @@
 from i2v.base import Illustration2VecBase
 import json
+import warnings
 import numpy as np
 from scipy.ndimage import zoom
 from skimage.transform import resize
@@ -64,7 +65,10 @@ class ChainerI2V(Illustration2VecBase):
             return y.data
 
 def make_i2v_with_chainer(param_path, tag_path=None):
-    net = CaffeFunction(param_path)
+    # ignore UserWarnings from chainer
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        net = CaffeFunction(param_path)
     if tag_path is not None:
         tags = json.loads(open(tag_path, 'r').read())
         assert(len(tags) == 1539)
