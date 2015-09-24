@@ -61,5 +61,6 @@ docs/_build/
 target/
 
 # The followings are the customized .gitignore
+*.prototxt
 *.caffemodel
 *.json
