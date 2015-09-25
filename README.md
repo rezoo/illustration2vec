@@ -1,9 +1,8 @@
 # Illustration2Vec
 
 ``illustration2vec (i2v)`` is a simple library for estimating a set of tags and
-extracting semantic feature vectors from given illustrations with
-Convolutional Neural Networks. For details, please see
-[our project page](http://illustration2vec.net) or
+extracting semantic feature vectors from given illustrations.
+For details, please see [our project page](http://illustration2vec.net) or
 [our main paper](http://illustration2vec.net/papers/illustration2vec-main.pdf).
 
 # Demo
@@ -12,8 +11,9 @@ Convolutional Neural Networks. For details, please see
 
 # Requirements
 
-* Pre-trained CNN models (please download them from
-  http://illustration2vec.net or run ``get_models.sh`` in this repository).
+* Pre-trained models (``i2v`` uses Convolutional Neural Networks. Please download
+  several pre-trained models from http://illustration2vec.net,
+  or execute ``get_models.sh`` in this repository).
 * ``numpy`` and ``scipy``
 * ``PIL`` (Python Imaging Library) or its alternatives (e.g., ``Pillow``) 
 * ``skimage`` (Image processing library for python)
@@ -36,6 +36,9 @@ This image is licensed under the Creative Commons - Attribution-NonCommercial,
 3.0 Unported (CC BY-NC).
 
 ## Tag prediction
+
+``i2v`` estimates a number of semantic tags from given illustrations
+in the following manner.
 ```python
 import i2v
 from PIL import Image
@@ -51,7 +54,8 @@ illust2vec = i2v.make_i2v_with_chainer(
 img = Image.open("images/miku.jpg")
 illust2vec.estimate_plausible_tags([img], threshold=0.5)
 ```
-The returned result is the following:
+``estimate_plausible_tags()`` returns dictionaries that have a pair of
+tag and its confidence.
 ```python
 [{'character': [(u'hatsune miku', 0.9999994039535522)],
   'copyright': [(u'vocaloid', 0.9999998807907104)],
@@ -70,10 +74,15 @@ The returned result is the following:
    (u'questionable', 0.020535090938210487),
    (u'explicit', 0.0006299660308286548)]}]
 ```
+These tags are classified into the following four categories:
+*general tags* representing general attributes includes in an image,
+*copyright tags* representing the specific name of the copyright,
+*character tags* representing the specific name of the characters,
+and *rating tags* representing X ratings.
 
 ## Feature vector extraction
 
-``i2v`` supports the two types of feature vectors: the real vectors and the binary ones.
+``i2v`` can extract a semantic feature vector from an illustration.
 ```python
 import i2v
 from PIL import Image
@@ -86,10 +95,12 @@ illust2vec = i2v.make_i2v_with_chainer("illust2vec_ver200.caffemodel")
 
 img = Image.open("images/miku.jpg")
 
+# extract a 4,096-dimensional feature vector
 result_real = illust2vec.extract_feature([img])
 print("shape: {}, dtype: {}".format(result_real.shape, result_real.dtype))
 print(result_real)
 
+# i2v also supports a 4,096-bit binary feature vector
 result_binary = illust2vec.extract_binary_feature([img])
 print("shape: {}, dtype: {}".format(result_binary.shape, result_binary.dtype))
 print(result_binary)
