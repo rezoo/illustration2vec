@@ -18,9 +18,22 @@ class Illustration2VecBase(object):
     def _extract(self, inputs, layername):
         pass
 
+    def _convert_image(self, image):
+        arr = np.asarray(image, dtype=np.float32)
+        if arr.ndim == 2:
+            # convert a monochrome image to a color one
+            ret = np.zeros((arr.shape[0], arr.shape[1], 3), dtype=np.float32)
+            ret += arr.reshape(arr.shape[0], arr.shape[1], 1)
+            return ret
+        elif arr.ndim == 3:
+            # if arr contains alpha channel, remove it
+            return arr[:,:,:3]
+        else:
+            raise TypeError('unsupported image specified')
+
     def _estimate(self, images):
         assert(self.tags is not None)
-        imgs = [np.asarray(img, dtype=np.float32) for img in images]
+        imgs = [self._convert_image(img) for img in images]
         prob = self._extract(imgs, layername='prob')
         prob = prob.reshape(prob.shape[0], -1)
         return prob
@@ -76,13 +89,13 @@ class Illustration2VecBase(object):
         return result
 
     def extract_feature(self, images):
-        imgs = [np.asarray(img, dtype=np.float32) for img in images]
+        imgs = [self._convert_image(img) for img in images]
         feature = self._extract(imgs, layername='encode1')
         feature = feature.reshape(feature.shape[0], -1)
         return feature
 
     def extract_binary_feature(self, images):
-        imgs = [np.asarray(img, dtype=np.float32) for img in images]
+        imgs = [self._convert_image(img) for img in images]
         feature = self._extract(imgs, layername='encode1neuron')
         feature = feature.reshape(feature.shape[0], -1)
         binary_feature = np.zeros_like(feature, dtype=np.uint8)
