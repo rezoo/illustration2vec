@@ -54,6 +54,7 @@ illust2vec = i2v.make_i2v_with_chainer(
 img = Image.open("images/miku.jpg")
 illust2vec.estimate_plausible_tags([img], threshold=0.5)
 ```
+
 ``estimate_plausible_tags()`` returns dictionaries that have a pair of
 tag and its confidence.
 ```python
@@ -75,10 +76,16 @@ tag and its confidence.
    (u'explicit', 0.0006299660308286548)]}]
 ```
 These tags are classified into the following four categories:
-*general tags* representing general attributes includes in an image,
+*general tags* representing general attributes included in an image,
 *copyright tags* representing the specific name of the copyright,
 *character tags* representing the specific name of the characters,
 and *rating tags* representing X ratings.
+
+If you want to focus on several specific tags, use ``estimate_specific_tags()`` instead.
+```python
+illust2vec.estimate_specific_tags([img], ["1girl", "blue eyes", "safe"])
+# -> [{'1girl': 0.9873462319374084, 'blue eyes': 0.01301183458417654, 'safe': 0.9785731434822083}]
+```
 
 ## Feature vector extraction
 
