@@ -76,40 +76,45 @@ class Illustration2VecBase(object):
             })
         return result
 
+    def __extract_plausible_tags(self, preds, f):
+        result = []
+        for pred in preds:
+            general = [(t, p) for t, p in pred['general'] if f(t, p)]
+            character = [(t, p) for t, p in pred['character'] if f(t, p)]
+            copyright = [(t, p) for t, p in pred['copyright'] if f(t, p)]
+            result.append({
+                'general': general,
+                'character': character,
+                'copyright': copyright,
+                'rating': pred['rating'],
+            })
+        return result
+
     def estimate_plausible_tags(
             self, images, threshold=0.25, threshold_rule='constant'):
         preds = self.estimate_top_tags(images, n_tag=512)
         result = []
         if threshold_rule == 'constant':
-            for pred in preds:
-                general = [(t, p) for t, p in pred['general'] if p > threshold]
-                character = [
-                    (t, p) for t, p in pred['character'] if p > threshold]
-                copyright = [
-                    (t, p) for t, p in pred['copyright'] if p > threshold]
-                result.append({
-                    'general': general,
-                    'character': character,
-                    'copyright': copyright,
-                    'rating': pred['rating'],
-                })
+            return self.__extract_plausible_tags(
+                preds, lambda t, p: p > threshold)
+        elif threshold_rule == 'f0.5':
+            if self.threshold is None:
+                raise TypeError(
+                    'please specify threshold option during init.')
+            return self.__extract_plausible_tags(
+                preds, lambda t, p: p > self.threshold[self.index[t], 0])
         elif threshold_rule == 'f1':
             if self.threshold is None:
                 raise TypeError(
-                    'to use f1 rule, please specify fscore during init.')
-            for pred in preds:
-                general = [(t, p) for t, p in pred['general'] \
-                    if p > self.threshold[self.index[t], 1]]
-                character = [(t, p) for t, p in pred['character'] \
-                    if p > self.threshold[self.index[t], 1]]
-                copyright = [(t, p) for t, p in pred['copyright'] \
-                    if p > self.threshold[self.index[t], 1]]
-                result.append({
-                    'general': general,
-                    'character': character,
-                    'copyright': copyright,
-                    'rating': pred['rating'],
-                })
+                    'please specify threshold option during init.')
+            return self.__extract_plausible_tags(
+                preds, lambda t, p: p > self.threshold[self.index[t], 1])
+        elif threshold_rule == 'f2':
+            if self.threshold is None:
+                raise TypeError(
+                    'please specify threshold option during init.')
+            return self.__extract_plausible_tags(
+                preds, lambda t, p: p > self.threshold[self.index[t], 2])
         else:
             raise TypeError('unknown rule specified')
         return result
