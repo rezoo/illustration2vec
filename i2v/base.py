@@ -27,8 +27,8 @@ class Illustration2VecBase(object):
         arr = np.asarray(image, dtype=np.float32)
         if arr.ndim == 2:
             # convert a monochrome image to a color one
-            ret = np.zeros((arr.shape[0], arr.shape[1], 3), dtype=np.float32)
-            ret += arr.reshape(arr.shape[0], arr.shape[1], 1)
+            ret = np.empty((arr.shape[0], arr.shape[1], 3), dtype=np.float32)
+            ret[:] = arr.reshape(arr.shape[0], arr.shape[1], 1)
             return ret
         elif arr.ndim == 3:
             # if arr contains alpha channel, remove it
