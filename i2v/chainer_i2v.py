@@ -64,14 +64,20 @@ class ChainerI2V(Illustration2VecBase):
             y = self._forward(inputs, layername)
             return y.data
 
-def make_i2v_with_chainer(param_path, tag_path=None):
+def make_i2v_with_chainer(param_path, tag_path=None, threshold_path=None):
     # ignore UserWarnings from chainer
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
         net = CaffeFunction(param_path)
+
+    kwargs = {}
     if tag_path is not None:
         tags = json.loads(open(tag_path, 'r').read())
         assert(len(tags) == 1539)
-        return ChainerI2V(net, tags)
-    else:
-        return ChainerI2V(net)
+        kwargs['tags'] = tags
+
+    if threshold_path is not None:
+        fscore_threshold = np.load(threshold_path)['threshold']
+        kwargs['threshold'] = fscore_threshold
+
+    return ChainerI2V(net, **kwargs)

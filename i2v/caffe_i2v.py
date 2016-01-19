@@ -33,13 +33,19 @@ class CaffeI2V(Illustration2VecBase):
         return out
 
 
-def make_i2v_with_caffe(net_path, param_path, tag_path=None):
+def make_i2v_with_caffe(net_path, param_path, tag_path=None, threshold_path=None):
     mean = np.array([ 164.76139251,  167.47864617,  181.13838569])
     net = Classifier(
         net_path, param_path, mean=mean, channel_swap=(2, 1, 0))
+
+    kwargs = {}
     if tag_path is not None:
         tags = json.loads(open(tag_path, 'r').read())
         assert(len(tags) == 1539)
-        return CaffeI2V(net, tags)
-    else:
-        return CaffeI2V(net)
+        kwargs['tags'] = tags
+
+    if threshold_path is not None:
+        fscore_threshold = np.load(threshold_path)['threshold']
+        kwargs['threshold'] = fscore_threshold
+
+    return CaffeI2V(net, **kwargs)

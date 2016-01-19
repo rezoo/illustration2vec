@@ -6,13 +6,18 @@ class Illustration2VecBase(object):
 
     __metaclass__ = ABCMeta
 
-    def __init__(self, net, tags=None):
+    def __init__(self, net, tags=None, threshold=None):
         self.net = net
         if tags is not None:
             self.tags = np.array(tags)
             self.index = {t: i for i, t in enumerate(tags)}
         else:
             self.tags = None
+
+        if threshold is not None:
+            self.threshold = threshold
+        else:
+            self.threshold = None
 
     @abstractmethod
     def _extract(self, inputs, layername):
@@ -71,21 +76,42 @@ class Illustration2VecBase(object):
             })
         return result
 
-    def estimate_plausible_tags(self, images, threshold=0.25):
+    def estimate_plausible_tags(
+            self, images, threshold=0.25, threshold_rule='constant'):
         preds = self.estimate_top_tags(images, n_tag=512)
         result = []
-        for pred in preds:
-            general = [(t, p) for t, p in pred['general'] if p > threshold]
-            character = [
-                (t, p) for t, p in pred['character'] if p > threshold]
-            copyright = [
-                (t, p) for t, p in pred['copyright'] if p > threshold]
-            result.append({
-                'general': general,
-                'character': character,
-                'copyright': copyright,
-                'rating': pred['rating'],
-            })
+        if threshold_rule == 'constant':
+            for pred in preds:
+                general = [(t, p) for t, p in pred['general'] if p > threshold]
+                character = [
+                    (t, p) for t, p in pred['character'] if p > threshold]
+                copyright = [
+                    (t, p) for t, p in pred['copyright'] if p > threshold]
+                result.append({
+                    'general': general,
+                    'character': character,
+                    'copyright': copyright,
+                    'rating': pred['rating'],
+                })
+        elif threshold_rule == 'f1':
+            if self.threshold is None:
+                raise TypeError(
+                    'to use f1 rule, please specify fscore during init.')
+            for pred in preds:
+                general = [(t, p) for t, p in pred['general'] \
+                    if p > self.threshold[self.index[t], 1]]
+                character = [(t, p) for t, p in pred['character'] \
+                    if p > self.threshold[self.index[t], 1]]
+                copyright = [(t, p) for t, p in pred['copyright'] \
+                    if p > self.threshold[self.index[t], 1]]
+                result.append({
+                    'general': general,
+                    'character': character,
+                    'copyright': copyright,
+                    'rating': pred['rating'],
+                })
+        else:
+            raise TypeError('unknown rule specified')
         return result
 
     def extract_feature(self, images):
