@@ -64,3 +64,4 @@ target/
 *.prototxt
 *.caffemodel
 *.json
+.DS_Store
