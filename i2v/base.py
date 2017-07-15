@@ -61,18 +61,18 @@ class Illustration2VecBase(object):
         result = []
         for i in range(prob.shape[0]):
             result.append({
-                'general': zip(
+                'general': list(zip(
                     self.tags[general_arg[i]],
-                    general_prob[i, general_arg[i]].tolist()),
-                'character': zip(
+                    general_prob[i, general_arg[i]].tolist())),
+                'character': list(zip(
                     self.tags[512 + character_arg[i]],
-                    character_prob[i, character_arg[i]].tolist()),
-                'copyright': zip(
+                    character_prob[i, character_arg[i]].tolist())),
+                'copyright': list(zip(
                     self.tags[1024 + copyright_arg[i]],
-                    copyright_prob[i, copyright_arg[i]].tolist()),
-                'rating': zip(
+                    copyright_prob[i, copyright_arg[i]].tolist())),
+                'rating': list(zip(
                     self.tags[1536 + rating_arg[i]],
-                    rating_prob[i, rating_arg[i]].tolist()),
+                    rating_prob[i, rating_arg[i]].tolist())),
             })
         return result
 

@@ -4,9 +4,10 @@ import warnings
 import numpy as np
 from scipy.ndimage import zoom
 from skimage.transform import resize
+import chainer
 from chainer import Variable
 from chainer.functions import average_pooling_2d, sigmoid
-from chainer.functions.caffe import CaffeFunction
+from chainer.links.caffe import CaffeFunction
 
 
 class ChainerI2V(Illustration2VecBase):
@@ -24,7 +25,7 @@ class ChainerI2V(Illustration2VecBase):
                 # skimage is fast but only understands {1,3} channel images
                 # in [0, 1].
                 im_std = (im - im_min) / (im_max - im_min)
-                resized_std = resize(im_std, new_dims, order=interp_order)
+                resized_std = resize(im_std, new_dims, order=interp_order, mode='constant')
                 resized_im = resized_std * (im_max - im_min) + im_min
             else:
                 # the image is a constant -- avoid divide by 0
@@ -47,7 +48,8 @@ class ChainerI2V(Illustration2VecBase):
         input_ -= self.mean  # subtract mean
         input_ = input_.transpose((0, 3, 1, 2))  # (N, H, W, C) -> (N, C, H, W)
         x = Variable(input_)
-        y, = self.net(inputs={'data': x}, outputs=[layername], train=False)
+        with chainer.using_config('train', False):
+            y, = self.net(inputs={'data': x}, outputs=[layername])
         return y
 
     def _extract(self, inputs, layername):
