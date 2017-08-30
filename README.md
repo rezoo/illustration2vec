@@ -2,17 +2,14 @@
 
 ``illustration2vec (i2v)`` is a simple library for estimating a set of tags and
 extracting semantic feature vectors from given illustrations.
-For details, please see [our project page](http://illustration2vec.net) or
-[our main paper](http://illustration2vec.net/papers/illustration2vec-main.pdf).
-
-# Demo
-
-* http://demo.illustration2vec.net
+For details, please see
+[our main paper](https://github.com/rezoo/illustration2vec/raw/master/papers/illustration2vec-main.pdf).
 
 # Requirements
 
 * Pre-trained models (``i2v`` uses Convolutional Neural Networks. Please download
-  several pre-trained models from http://illustration2vec.net,
+  several pre-trained models from
+  [here](https://github.com/rezoo/illustration2vec/releases),
   or execute ``get_models.sh`` in this repository).
 * ``numpy`` and ``scipy``
 * ``PIL`` (Python Imaging Library) or its alternatives (e.g., ``Pillow``) 
