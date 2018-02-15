@@ -2,11 +2,16 @@ from i2v.base import Illustration2VecBase
 import json
 import warnings
 import numpy as np
+from distutils.version import StrictVersion
 from scipy.ndimage import zoom
 from skimage.transform import resize
+import chainer
 from chainer import Variable
 from chainer.functions import average_pooling_2d, sigmoid
-from chainer.functions.caffe import CaffeFunction
+try:
+    from chainer.functions.caffe import CaffeFunction
+except:
+    from chainer.links.caffe import CaffeFunction
 
 
 class ChainerI2V(Illustration2VecBase):
@@ -47,7 +52,14 @@ class ChainerI2V(Illustration2VecBase):
         input_ -= self.mean  # subtract mean
         input_ = input_.transpose((0, 3, 1, 2))  # (N, H, W, C) -> (N, C, H, W)
         x = Variable(input_)
-        y, = self.net(inputs={'data': x}, outputs=[layername], train=False)
+
+        # train argument is not supported from Ver2.
+        if StrictVersion(chainer.__version__) < StrictVersion('2.0.0'):
+            y, = self.net(inputs={'data': x}, outputs=[layername], train=False)
+        else:
+            chainer.using_config('train', False)
+            y, = self.net(inputs={'data': x}, outputs=[layername])
+
         return y
 
     def _extract(self, inputs, layername):
