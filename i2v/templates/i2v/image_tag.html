@@ -1,0 +1,114 @@
+{% extends 'admin/master.html' %}
+{% block head %}
+<link rel="shortcut icon" href="#" />
+{% endblock %}
+{% block body %}
+<div>
+  <form action="{{url_for('.create_view', url=url_for('.plausible_tag_view'))}}"
+    method="POST" role="form" class="admin-form form-horizontal" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="path" class="col-md-2 control-label">Image
+          &nbsp;
+      </label>
+      <div class="col-md-10">
+        <input class="form-control" id="path" name="path" type="file">
+      </div>
+    </div>
+    <hr>
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-10 submit-row">
+        <input type="submit" class="btn btn-primary" value="Save">
+          <a href="#" class="btn btn-danger" role="button" data-dismiss="modal">Cancel</a>
+      </div>
+    </div>
+  </form>
+</div>
+<div>
+  <ul class="nav nav-tabs">
+    <li class="{% if mode=='plausible' %}active{% endif %}">
+      <a href="{{url_for('.plausible_tag_view', id=model.id)}}">Plausible Tags</a>
+    </li>
+    <li class="{% if mode=='top' %}active{% endif %}">
+      <a href="{{url_for('.top_tag_view', id=model.id)}}">Top Tags</a>
+    </li>
+  </ul>
+</div>
+<div class="col-md-6">
+  <a href="#" id="pop">
+    <img id="imageresource" style="max-width:100%" src="{{url_for('file', filename=model.path)}}"></div>
+  </a>
+<div class="col-md-6">
+  <table class="table table-condensed">
+    {% for tag_namespace, tag_list in estimated_tags.items() %}
+      <tr>
+        <th>#</th>
+        <th>{{tag_namespace|capitalize}} Tag</th>
+        <th>Confidence</th>
+        <!-- <th>Confirm</th> -->
+      </tr>
+      {% for tag, tag_confidence in tag_list %}
+        <tr>
+          <td>{{loop.index}}</td>
+          <td class="tag-{{tag_namespace}}" data-index="{{loop.index}}">{{tag}}</td>
+          <td>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar"
+                aria-valuenow="{{'%0.0f' | format(tag_confidence*100)}}" aria-valuemin="0" aria-valuemax="100"
+                style="min-width: 2em; width: {{'%0.0f' | format(tag_confidence*100)}}%;">
+                {{'%0.1f' | format(tag_confidence*100)}}
+              </div>
+            </div>
+          </td>
+          <td>
+            <!-- <form> -->
+              <!-- <fieldset> -->
+                <!-- <label for="valid">  -->
+                  <!-- <input type="radio" value="valid" name="status"> -->
+                  <!-- <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span> -->
+                <!-- </label> -->
+                <!-- <label for="invalid">  -->
+                  <!-- <input type="radio" value="invalid" name="status"> -->
+                  <!-- <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span> -->
+                <!-- </label> -->
+                <!-- <label for="invalid"> -->
+                  <!-- <input type="radio" value="unknown" name="status" checked> -->
+                  <!-- <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> -->
+                <!-- </label> -->
+              <!-- </fieldset> -->
+            <!-- </form> -->
+          </td>
+        </tr> 
+      {% endfor %}
+    {% endfor %}
+  </table>
+</div>
+<!-- bootstrap modal where the image will appear -->
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Image preview</h4>
+      </div>
+      <div class="modal-body">
+        <img src="" id="imagepreview" style="max-width: 100%; max-height: 100%;" >
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div>
+  <span class="hidden"><a id="hydrus-link" href="{{url_for('image.plausible_tag_view', id=model.id)}}"></a></span> 
+</div>
+{% endblock %}
+{% block tail_js %}
+{{super()}}
+<script>
+  $("#pop").on("click", function() {
+     $('#imagepreview').attr('src', $('#imageresource').attr('src')); // here asign the image to the modal when the user click the enlarge link
+     $('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,2 @@
+recursive-include i2v/templates *
+recursive-include i2v/static *
