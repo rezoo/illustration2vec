@@ -25,7 +25,7 @@ class ChainerI2V(Illustration2VecBase):
                 # skimage is fast but only understands {1,3} channel images
                 # in [0, 1].
                 im_std = (im - im_min) / (im_max - im_min)
-                resized_std = resize(im_std, new_dims, order=interp_order)
+                resized_std = resize(im_std, new_dims, order=interp_order, mode='constant')
                 resized_im = resized_std * (im_max - im_min) + im_min
             else:
                 # the image is a constant -- avoid divide by 0

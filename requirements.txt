@@ -1,0 +1,5 @@
+numpy
+scipy
+Pillow
+scikit-image
+chainer>=2.0.0
