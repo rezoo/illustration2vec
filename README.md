@@ -12,7 +12,7 @@ For details, please see
   [here](https://github.com/rezoo/illustration2vec/releases),
   or execute ``get_models.sh`` in this repository).
 * ``numpy`` and ``scipy``
-* ``PIL`` (Python Imaging Library) or its alternatives (e.g., ``Pillow``) 
+* ``PIL`` (Python Imaging Library) or its alternatives (e.g., ``Pillow``)
 * ``skimage`` (Image processing library for python)
 
 In addition to the above libraries and the pre-trained models, `i2v` requires
@@ -144,6 +144,37 @@ shape: (1, 512), dtype: uint8
   254  28 205 181 118 153 170 155 187  60  90 148 189 218 187 172  95 182
   250 255 147 137 157 225 127 127  42  55 191 114  45 238 228 222  53  94
    42 181  38 254 177 232 150  99]]
+```
+
+# Caffe Demo
+
+If you have caffe installed, use the `demo_caffe.py` to run a demo. For help,
+type python `demo_caffe.py --help`. You need to specify the directory where the
+model definition, model and the tags are stored.
+
+Assuming you have caffe setup correctly and all the files related to the model
+stored in the `models` directory, run `python demo_caffe.py` and you should see
+the following output :
+
+```
+[{'rating': [(u'safe', 0.978573203086853), (u'questionable', 0.02053508535027504),
+(u'explicit', 0.0006299669039435685)], 'character': [(u'hatsune miku', 0.999999463558197),
+(u'hatsune miku (append)', 0.000614884658716619), (u'kaito', 0.00040319858817383647),
+(u'hiiragi kagami', 0.00026519616949371994), (u'kagamine rin', 0.00023899678490124643),
+(u'megurine luka', 8.804832032183185e-05), (u'sakura miku', 4.707770131062716e-05),
+(u'kagamine len', 4.015495505882427e-05), (u'meiko', 2.7492344088386744e-05),
+(u'yuki miku', 1.8482929590390995e-05)], 'copyright': [(u'vocaloid', 0.9999998807907104),
+(u'project diva (series)', 0.0013757868437096477), (u'pangya', 0.00047354138223454356),
+(u'lucky star', 0.00034585013054311275), (u'project diva 2nd', 0.00028244982240721583),
+(u'pixiv', 9.411591599928215e-05), (u'utau', 9.144698560703546e-05),
+(u'transformers', 8.012886974029243e-05), (u'world is mine (vocaloid)', 7.95463056419976e-05),
+(u'macross', 5.722872447222471e-05)], 'general': [(u'thighhighs', 0.9956372380256653),
+(u'1girl', 0.9873462319374084), (u'twintails', 0.9812834858894348),
+(u'solo', 0.9632901549339294), (u'aqua hair', 0.9167951345443726),
+(u'long hair', 0.8817108273506165), (u'very long hair', 0.8326570987701416),
+(u'detached sleeves', 0.7448859810829163), (u'skirt', 0.6780790090560913),
+(u'necktie', 0.5608367919921875)]}]
+
 ```
 
 # License
