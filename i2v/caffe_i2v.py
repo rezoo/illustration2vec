@@ -21,6 +21,7 @@ class CaffeI2V(Illustration2VecBase):
             -self.net.crop_dims / 2.0,
             self.net.crop_dims / 2.0
         ])
+        crop = [int(i) for i in crop]
         input_ = input_[:, crop[0]:crop[2], crop[1]:crop[3], :]
         # Classify
         caffe_in = np.zeros(
